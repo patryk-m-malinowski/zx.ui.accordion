@@ -24,6 +24,6 @@ qx.Theme.define("zx.ui.accordion.theme.tangible.MAppearance", {
           source: states.open ? "@MaterialIcons/expand_less/32" : "@MaterialIcons/expand_more/32"
         };
       }
-    },
+    }
   }
 });

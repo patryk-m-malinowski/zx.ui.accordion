@@ -14,6 +14,6 @@ qx.Theme.define("zx.ui.accordion.theme.simple.MColor", {
     "accordion-minimap-content-background": "transparent",
     "accordion-minimap-floatybit-background": "link",
     "accordion-minimap-tooltip-background": "background",
-    "accordion-minimap-skeleton-background": "link",
+    "accordion-minimap-skeleton-background": "link"
   }
 });

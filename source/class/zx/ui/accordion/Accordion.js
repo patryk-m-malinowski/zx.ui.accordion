@@ -91,13 +91,13 @@ qx.Class.define("zx.ui.accordion.Accordion", {
      * @override
      */
     _createChildControlImpl(id) {
+      let control;
       switch (id) {
         case "panelgroup":
-          return new zx.ui.accordion.AccordionPanelGroup();
+          control = new zx.ui.accordion.AccordionPanelGroup();
+          break;
         case "minimap":
-          const control = new zx.ui.accordion.minimap.Minicordion(
-            this.getChildControl("panelgroup")
-          );
+          control = new zx.ui.accordion.minimap.Minicordion(this.getChildControl("panelgroup"));
           this._add(control, { right: 40, top: 0 });
 
           // bind scale factor
@@ -156,12 +156,13 @@ qx.Class.define("zx.ui.accordion.Accordion", {
             heightApply();
           });
 
-          return control;
+          break;
         case "scroll":
-          return new qx.ui.container.Scroll(this.getChildControl("panelgroup"));
+          control = new qx.ui.container.Scroll(this.getChildControl("panelgroup"));
+          break;
       }
 
-      return super._createChildControlImpl(id);
+      return control ?? super._createChildControlImpl(id);
     },
 
     /**

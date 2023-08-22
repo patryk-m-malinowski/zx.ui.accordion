@@ -35,7 +35,7 @@ qx.Class.define("zx.ui.accordion.AccordionHeader", {
       nullable: false,
       event: "changeLabel",
       apply: "_applyLabel"
-    },
+    }
   },
 
   members: {
