@@ -10,6 +10,11 @@
 
 qx.Theme.define("zx.ui.accordion.theme.simple.MDecoration", {
   decorations: {
+    /*
+      ---------------------------------------------------------------------------
+        ACCORDION
+      ---------------------------------------------------------------------------
+    */
     "accordion-panel-header": {
       include: "button-box",
       style: {
