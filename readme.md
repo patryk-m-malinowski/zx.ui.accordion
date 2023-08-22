@@ -84,31 +84,37 @@ more effective solution in the near future.
 
 The accordion components have many themable widgets throughout the hierarchy.
 
-The appearance tokens can be viewed in The `MAppearance.js` files under the
-`source/class/zx/ui/accordion/theme/` folder. These files can also be used by
-your application to effortlessly apply appearances to match your theme.
+The appearance tokens can be viewed in The [`source/class/zx/ui/accordion/theme/MAppearance.js` file](source/class/zx/ui/accordion/theme/MAppearance.js).
+These mixins can also be used by your application to effortlessly apply
+styles to match your theme.
 
-The currently supported themes are as follows. The `Theme.js` files listed
+The currently supported themes are as follows. The `*/Theme.js` files listed
 demonstrate including the provided mixins in your application theme.
 
 - Indigo [`source/class/zx/demo/theme/indigo/Theme.js`](source/class/zx/demo/theme/indigo/Theme.js)
 - Simple [`source/class/zx/demo/theme/simple/Theme.js`](source/class/zx/demo/theme/simple/Theme.js)
 - Tangible [`source/class/zx/demo/theme/tangible/Theme.js`](source/class/zx/demo/theme/tangible/Theme.js)
 
-for example, to include the Indigo appearances and decorations in your
-app, you would ensure your theme contains the following:
+for example, to include the Tangible appearances and decorations in your app,
+you would ensure your theme contains the following:
 
 ```js
 // theme/Appearance.js
 qx.Theme.define("myapp.theme.Appearance", {
   extend: qx.theme.indigo.Appearance,
-  include: [zx.ui.accordion.theme.indigo.MAppearance]
+  include: [zx.ui.accordion.theme.MAppearance]
+});
+
+// theme/Color.js
+qx.Theme.define("myapp.theme.Color", {
+  extend: qx.theme.tangible.ColorLight, // or *.ColorDark - both work
+  include: [zx.ui.accordion.theme.tangible.MColor]
 });
 
 // theme/Decoration.js
 qx.Theme.define("myapp.theme.Decoration", {
   extend: qx.theme.indigo.Decoration,
-  include: [zx.ui.accordion.theme.indigo.MDecoration]
+  include: [zx.ui.accordion.theme.tangible.MDecoration]
 });
 
 // theme/Font.js
@@ -120,11 +126,11 @@ qx.Theme.define("myapp.theme.Font", {
 // theme/Theme.js
 qx.Theme.define("myapp.theme.Theme", {
   meta: {
-    color: myapp.theme.Color, // or qx.theme.indigo.Color, &c.
+    appearance: myapp.theme.Appearance,
+    color: myapp.theme.Color,
     decoration: myapp.theme.Decoration,
     font: myapp.theme.Font,
-    icon: myapp.theme.Icon, // or qx.theme.icon.Tango, &c.
-    appearance: myapp.theme.Appearance
+    icon: myapp.theme.Icon // or qx.theme.icon.Tango, &c.
   }
 });
 ```

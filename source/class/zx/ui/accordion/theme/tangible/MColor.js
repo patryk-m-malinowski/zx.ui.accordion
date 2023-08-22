@@ -9,5 +9,11 @@
 ************************************************************************ */
 
 qx.Theme.define("zx.ui.accordion.theme.tangible.MColor", {
-  colors: {}
+  colors: {
+    "accordion-panel-background": "surface",
+    "accordion-minimap-content-background": "transparent",
+    "accordion-minimap-floatybit-background": "primary",
+    "accordion-minimap-tooltip-background": "surface",
+    "accordion-minimap-skeleton-background": "primary",
+  }
 });

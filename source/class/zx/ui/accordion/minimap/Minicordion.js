@@ -129,7 +129,7 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
       switch (id) {
         case "content":
           control = new qx.ui.container.Composite(new qx.ui.layout.VBox());
-          this._add(control, { left: 0, right: 0, top: 0 });
+          this._add(control, { left: 0, right: 0, top: 0, bottom: 0 });
           break;
         case "floatybit":
           control = new zx.ui.accordion.minimap.FloatyBit();

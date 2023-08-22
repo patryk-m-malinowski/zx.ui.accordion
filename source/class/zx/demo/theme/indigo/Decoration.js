@@ -10,5 +10,5 @@
 
 qx.Theme.define("zx.demo.theme.indigo.Decoration", {
   extend: qx.theme.indigo.Decoration,
-  include: [zx.ui.accordion.theme.indigo.MDecoration]
+  include: [zx.ui.accordion.theme.MDecoration]
 });

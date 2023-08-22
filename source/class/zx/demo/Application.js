@@ -90,9 +90,9 @@ qx.Class.define("zx.demo.Application", {
 
     __makeLoremBox(name) {
       const lorem = new qx.ui.basic.Label(
-        `<h1>${
+        `<h3>${
           name ?? "Lorem Ipsum"
-        }</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae diam eget risus varius blandit sit amet non magna. Nullam quis risus eget urna mollis ornare vel eu leo. Donec id elit non mi porta gravida at eget metus.</p>`
+        }</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae diam eget risus varius blandit sit amet non magna. Nullam quis risus eget urna mollis ornare vel eu leo. Donec id elit non mi porta gravida at eget metus.</p>`
       );
       lorem.setRich(true);
       return lorem;

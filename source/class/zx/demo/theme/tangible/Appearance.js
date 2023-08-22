@@ -10,5 +10,5 @@
 
 qx.Theme.define("zx.demo.theme.tangible.Appearance", {
   extend: qx.theme.tangible.Appearance,
-  include: [zx.ui.accordion.theme.tangible.MAppearance]
+  include: [zx.ui.accordion.theme.MAppearance]
 });

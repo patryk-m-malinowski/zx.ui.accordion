@@ -22,7 +22,7 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
     this._setLayout(new qx.ui.layout.Canvas());
 
-    this._add(this.getChildControl("scroll"), { top: 0, left: 0, right: 0 });
+    this._add(this.getChildControl("scroll"), { edge: 0 });
 
     if (minimap) this.setMinimap(minimap);
   },

@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("zx.ui.accordion.theme.indigo.MDecoration", {
+qx.Theme.define("zx.ui.accordion.theme.MDecoration", {
   decorations: {
     /*
       ---------------------------------------------------------------------------
