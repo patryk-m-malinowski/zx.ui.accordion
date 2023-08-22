@@ -59,30 +59,6 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
       nullable: false,
       event: "changePanelOpen",
       apply: "_applyPanelOpen"
-    },
-
-    /**
-     * The icon to use for the button when the panel is closed.
-     */
-    buttonIconClosed: {
-      check: "String",
-      nullable: false,
-      event: "changeButtonIconClosed",
-      apply: "_applyIcon",
-      themeable: true,
-      init: ""
-    },
-
-    /**
-     * The icon to use for the button when the panel is open.
-     */
-    buttonIconOpen: {
-      check: "String",
-      nullable: false,
-      event: "changeButtonIconOpen",
-      apply: "_applyIcon",
-      themeable: true,
-      init: ""
     }
   },
 
@@ -94,6 +70,10 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
   },
 
   members: {
+    _forwardStates: {
+      open: true
+    },
+
     /**
      * Returns the content widget. Necessary implementation for
      * {@link qx.ui.core.MRemoteChildrenHandling}.
@@ -107,9 +87,8 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
      */
     _applyPanelOpen(value) {
       this.getChildControl("content").setVisibility(value ? "visible" : "excluded");
-      this.getChildControl("header").setIcon(
-        value ? this.getButtonIconOpen() : this.getButtonIconClosed()
-      );
+      if (value) this.addState("open");
+      else this.removeState("open");
     },
 
     /**
@@ -117,15 +96,6 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
      */
     _applyLabel(value) {
       this.getChildControl("header").setLabel(value);
-    },
-
-    /**
-     * Apply for the buttonIconClosed property and the buttonIconOpen property.
-     */
-    _applyIcon() {
-      this.getChildControl("header").setIcon(
-        this.panelOpen ? this.getButtonIconOpen() : this.getButtonIconClosed()
-      );
     },
 
     /**

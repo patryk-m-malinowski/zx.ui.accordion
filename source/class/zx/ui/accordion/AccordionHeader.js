@@ -36,20 +36,13 @@ qx.Class.define("zx.ui.accordion.AccordionHeader", {
       event: "changeLabel",
       apply: "_applyLabel"
     },
-
-    /**
-     * The icon to display in the header.
-     */
-    icon: {
-      check: "String",
-      nullable: false,
-      event: "changeIcon",
-      apply: "_applyIcon",
-      init: ""
-    }
   },
 
   members: {
+    _forwardStates: {
+      open: true
+    },
+
     /**
      * Apply for the label property.
      */
@@ -74,7 +67,7 @@ qx.Class.define("zx.ui.accordion.AccordionHeader", {
           control = new qx.ui.basic.Label(this.getLabel());
           return control;
         case "icon":
-          control = new qx.ui.basic.Image(this.getIcon());
+          control = new qx.ui.basic.Image();
           return control;
       }
 

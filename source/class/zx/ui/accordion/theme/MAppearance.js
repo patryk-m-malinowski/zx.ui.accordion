@@ -75,8 +75,11 @@ qx.Theme.define("zx.ui.accordion.theme.MAppearance", {
     },
 
     "accordion-panel/header/icon": {
-      style() {
-        return { padding: [5, 0, 0, 0] };
+      style(states) {
+        return {
+          padding: [5, 0, 0, 0],
+          source: states.open ? "icon/16/places/folder-open.png" : "icon/16/places/folder.png"
+        };
       }
     },
 

@@ -69,16 +69,22 @@ doc.add(panel);
 
 ### Open & Closed Icons
 
-Panels can be given icons to display when the panel is open or closed.
+The open and closed icons used by the accordion panel headers can be set in your
+theme's appearances. The `open` state will be `true` if the panel is expanded,
+otherwise it will be unset.
 
 ```js
-panel.setButtonIconOpen(`...`);
-panel.setButtonIconClosed(`...`);
+// myapp/theme/Appearance.js
+    // ...
+    "accordion-panel/header/icon": {
+      style(states) {
+        return {
+          source: states.open ? "@MaterialIcons/expand_less/32" : "@MaterialIcons/expand_more/32"
+        };
+      }
+    },
+    // ...
 ```
-
-Currently to set a default icon for all panels, you will have to extend the
-`zx.ui.accordion.AccordionPanel` class. This will be changed to a better and
-more effective solution in the near future.
 
 ### Theming
 
@@ -99,31 +105,31 @@ for example, to include the Tangible appearances and decorations in your app,
 you would ensure your theme contains the following:
 
 ```js
-// theme/Appearance.js
+// myapp/theme/Appearance.js
 qx.Theme.define("myapp.theme.Appearance", {
   extend: qx.theme.indigo.Appearance,
-  include: [zx.ui.accordion.theme.MAppearance]
+  include: [zx.ui.accordion.theme.tangible.MAppearance]
 });
 
-// theme/Color.js
+// myapp/theme/Color.js
 qx.Theme.define("myapp.theme.Color", {
   extend: qx.theme.tangible.ColorLight, // or *.ColorDark - both work
   include: [zx.ui.accordion.theme.tangible.MColor]
 });
 
-// theme/Decoration.js
+// myapp/theme/Decoration.js
 qx.Theme.define("myapp.theme.Decoration", {
   extend: qx.theme.indigo.Decoration,
   include: [zx.ui.accordion.theme.tangible.MDecoration]
 });
 
-// theme/Font.js
+// myapp/theme/Font.js
 qx.Theme.define("myapp.theme.Font", {
   extend: qx.theme.indigo.Font,
   include: [zx.ui.accordion.theme.MFont]
 });
 
-// theme/Theme.js
+// myapp/theme/Theme.js
 qx.Theme.define("myapp.theme.Theme", {
   meta: {
     appearance: myapp.theme.Appearance,
@@ -134,3 +140,6 @@ qx.Theme.define("myapp.theme.Theme", {
   }
 });
 ```
+
+Other themes may entirely use the mixins at `zx.ui.accordion.theme.M*` instead
+of declaring their own if they are similar enough.
