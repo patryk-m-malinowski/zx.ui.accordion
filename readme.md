@@ -2,14 +2,26 @@
 
 Accordion component set for Qooxdoo
 
-## Usage
+## Demo
 
-[The demo application](source/class/zx/demo/Application.js) provides an example
-of how to use the accordion components.
+[The demo application](https://zenesisuk.github.io/zx.ui.accordion.zenesisuk.github.io/) provides an
+example of how to use the accordion components.
+
+## Features
+
+- Collapsible panels (collapsed by default)
+- Minimap of all panels (tooltips show panel titles)
+- Scroll accordion using the minimap
+- Jump to a panel using the minimap
+- Minimap scaling to remain within the available height (WIP: may have edge cases)
+
+## Usage
 
 Using the accordion is quite simple.
 
 ```js
+// `main()` of `myapp.Application`
+
 // passing `true` enables the minimap, this can instead be set later with `accordion.setMinimap(<boolean>)`
 const accordion = new zx.ui.accordion.Accordion(true);
 
@@ -38,6 +50,35 @@ doc.add(accordion);
 6. Repeat 2-5 as desired
 7. Add the accordion to the document
 8. Done
+
+### Lone Panels
+
+Panels are able to function in isolation, without an accordion. This may be
+useful for a variety of situations.
+
+```js
+// `main()` of `myapp.Application`
+
+const panel = new zx.ui.accordion.AccordionPanel(`My Panel Title`);
+
+panel.add(myContentWidget);
+
+const doc = this.getRoot();
+doc.add(panel);
+```
+
+### Open & Closed Icons
+
+Panels can be given icons to display when the panel is open or closed.
+
+```js
+panel.setButtonIconOpen(`...`);
+panel.setButtonIconClosed(`...`);
+```
+
+Currently to set a default icon for all panels, you will have to extend the
+`zx.ui.accordion.AccordionPanel` class. This will be changed to a better and
+more effective solution in the near future.
 
 ### Theming
 
