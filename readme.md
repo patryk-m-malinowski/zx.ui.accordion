@@ -50,9 +50,9 @@ your application to effortlessly apply appearances to match your theme.
 The currently supported themes are as follows. The `Theme.js` files listed
 demonstrate including the provided mixins in your application theme.
 
-- Indigo [`source/class/zx/ui/accordion/theme/Indigo/Theme.js`](source/class/zx/ui/accordion/theme/Indigo/Theme.js)
-- Simple [`source/class/zx/ui/accordion/theme/Simple/Theme.js`](source/class/zx/ui/accordion/theme/Simple/Theme.js)
-- Tangible [`source/class/zx/ui/accordion/theme/Tangible/Theme.js`](source/class/zx/ui/accordion/theme/Tangible/Theme.js)
+- Indigo [`source/class/zx/demo/theme/indigo/Theme.js`](source/class/zx/demo/theme/indigo/Theme.js)
+- Simple [`source/class/zx/demo/theme/simple/Theme.js`](source/class/zx/demo/theme/simple/Theme.js)
+- Tangible [`source/class/zx/demo/theme/tangible/Theme.js`](source/class/zx/demo/theme/tangible/Theme.js)
 
 for example, to include the Indigo appearances and decorations in your
 app, you would ensure your theme contains the following:
