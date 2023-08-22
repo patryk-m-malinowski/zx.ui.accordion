@@ -24,7 +24,7 @@
   "applications": [
     {
       "class": "zx.demo.Application",
-      "theme": "zx.demo.theme.indigo.Theme",
+      "theme": "zx.demo.theme.tangible.Theme",
       "name": "zx"
     }
   ]

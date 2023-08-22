@@ -1,9 +1,9 @@
 name: Build and Deploy
 on:
-  # run when the trunk branch is updated
+  # run when the master branch is updated
   push:
     branches:
-      - trunk
+      - master
 
   workflow_dispatch:
 
