@@ -14,7 +14,6 @@
     ],
     "version": "1.0.0"
   },
-
   "provides": {
     "namespace": "zx",
     "encoding": "utf-8",
@@ -22,7 +21,6 @@
     "resource": "source/resource",
     "translation": "source/translation"
   },
-
   "requires": {
     "@qooxdoo/framework": "^7.6.1"
   }
