@@ -41,7 +41,8 @@ qx.Class.define("zx.ui.SkeletonText", {
     lines: {
       check: "Array||Integer",
       nullable: false,
-      apply: "_applyLines"
+      apply: "_applyLines",
+      init: 0
     },
 
     /**
@@ -88,7 +89,7 @@ qx.Class.define("zx.ui.SkeletonText", {
       const lineLengths = [];
       for (let i = 0; i < lines; i++) {
         lineLengths.push(
-          Math.floor(((Math.random() + 0.4) ** 0.5) * (100 * this.getWidthScaleFactor()))
+          Math.floor((Math.random() + 0.4) ** 0.5 * (100 * this.getWidthScaleFactor()))
         );
       }
       return lineLengths;

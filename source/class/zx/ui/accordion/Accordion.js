@@ -22,7 +22,7 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
     this._setLayout(new qx.ui.layout.Canvas());
 
-    this._add(this.getChildControl("scroll"), { edge: 0 });
+    this._add(this.getChildControl("scroll"), { top: 0, left: 0, right: 0, bottom: 0 });
 
     if (minimap) this.setMinimap(minimap);
   },
@@ -105,7 +105,6 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
           // handle clicks on the minimap
           control.addListener("panelTap", e => {
-            // debugger;
             const top = this.getChildControl("scroll").getItemTop(e.getData());
             this.getChildControl("scroll").scrollToY(top);
           });
@@ -135,28 +134,24 @@ qx.Class.define("zx.ui.accordion.Accordion", {
               control.getChildControl("floatybit").scrollToFraction(scrollFraction);
             });
 
-          // continuous height sync
-          const heightApply = () => {
-            control
-              .getChildControl("floatybit")
-              .setHeight(
-                Math.trunc(
-                  this.getChildControl("scroll").getBounds().height * this.getAdjustedScaleFactor()
-                )
-              );
-          };
-
-          this.addListener("changeAdjustedScalefactor", heightApply);
-          this.getChildControl("panelgroup").addListener("resize", () => {
+          // height sync
+          let scrollHeight;
+          const heightApply = e => {
+            if (!scrollHeight)
+              scrollHeight = this.getChildControl("scroll").getBounds()?.height / 4;
             const scalefactor = this.getScaleFactor();
             const minimapHeight = control.getChildControl("content").getBounds()?.height ?? 1;
-            const scrollHeight = this.getChildControl("scroll").getBounds()?.height ?? 1;
             const adjusted = (this.getAdjustedScaleFactor() * scrollHeight) / minimapHeight;
-            this.setAdjustedScaleFactor(Math.min(scalefactor, adjusted * 0.75));
-            heightApply();
-          });
+            this.setAdjustedScaleFactor(Math.min(scalefactor, adjusted));
+            control
+              .getChildControl("floatybit")
+              .setHeight(Math.trunc(scrollHeight * 4 * this.getAdjustedScaleFactor()));
+          };
+          this.getChildControl("panelgroup").addListener("resize", heightApply);
+          control.addListener("panelTap", heightApply);
 
           break;
+
         case "scroll":
           control = new qx.ui.container.Scroll(this.getChildControl("panelgroup"));
           break;
