@@ -115,7 +115,7 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
       if (fraction) position *= maxTop;
       const top = ~~Math.max(0, Math.min(position, maxTop));
       this.setLayoutProperties({ top });
-      this.fireDataEvent("scrollToFraction", top / maxTop);
+      this.fireDataEvent("scrollToFraction", maxTop ? top / maxTop : 0);
     }
   }
 });
