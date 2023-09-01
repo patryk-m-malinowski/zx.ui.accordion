@@ -137,15 +137,17 @@ qx.Class.define("zx.ui.accordion.Accordion", {
           // height sync
           let scrollHeight;
           const heightApply = e => {
-            if (!scrollHeight)
-              scrollHeight = this.getChildControl("scroll").getBounds()?.height / 4;
-            const scalefactor = this.getScaleFactor();
-            const minimapHeight = control.getChildControl("content").getBounds()?.height ?? 1;
-            const adjusted = (this.getAdjustedScaleFactor() * scrollHeight) / minimapHeight;
-            this.setAdjustedScaleFactor(Math.min(scalefactor, adjusted));
-            control
-              .getChildControl("floatybit")
-              .setHeight(Math.trunc(scrollHeight * 4 * this.getAdjustedScaleFactor()));
+            setTimeout(() => {
+              if (!scrollHeight)
+                scrollHeight = this.getChildControl("scroll").getBounds()?.height / 4;
+              const scalefactor = this.getScaleFactor();
+              const minimapHeight = control.getChildControl("content").getBounds()?.height ?? 1;
+              const adjusted = (this.getAdjustedScaleFactor() * scrollHeight) / minimapHeight;
+              this.setAdjustedScaleFactor(Math.min(scalefactor, adjusted));
+              control
+                .getChildControl("floatybit")
+                .setHeight(Math.trunc(scrollHeight * 4 * this.getAdjustedScaleFactor()));
+            }, 100);
           };
           this.getChildControl("panelgroup").addListener("resize", heightApply);
           control.addListener("panelTap", heightApply);

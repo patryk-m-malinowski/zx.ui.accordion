@@ -104,6 +104,7 @@ qx.Class.define("zx.ui.accordion.minimap.MinicordionPanel", {
      * reflected.
      */
     _updateSize() {
+      this.setMaxHeight(Math.trunc(this.getPanel().getSizeHint().height * this.getScaleFactor()));
       this.getChildControl("content").setMaxHeight(
         Math.trunc(
           this.getPanel().getChildControl("content").getSizeHint().height * this.getScaleFactor()
