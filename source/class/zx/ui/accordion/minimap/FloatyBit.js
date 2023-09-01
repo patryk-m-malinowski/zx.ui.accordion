@@ -54,7 +54,7 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
       if (e.getPointerType() !== "wheel") return;
       const delta = e.getDelta().y;
       let top = this.getBounds().top + (delta > 0 ? 25 : -25);
-      this._scrollToPosition(top);
+      this.fireDataEvent("scrollToFraction", this._scrollToPosition(top));
       e.stop();
     },
 
@@ -94,7 +94,7 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
       const coord = e.getDocumentTop();
       const delta = coord - this.__coordInit;
       const top = this.__topInit + delta;
-      this._scrollToPosition(top);
+      this.fireDataEvent("scrollToFraction", this._scrollToPosition(top));
     },
 
     /**
@@ -115,7 +115,8 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
       if (fraction) position *= maxTop;
       const top = ~~Math.max(0, Math.min(position, maxTop));
       this.setLayoutProperties({ top });
-      this.fireDataEvent("scrollToFraction", maxTop ? top / maxTop : 0);
+      const ratio = top / maxTop;
+      return Number.isNaN(ratio) ? 0 : Math.max(0, Math.min(ratio, 1));
     }
   }
 });
