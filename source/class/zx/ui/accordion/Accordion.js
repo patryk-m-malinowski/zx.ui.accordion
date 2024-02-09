@@ -104,10 +104,7 @@ qx.Class.define("zx.ui.accordion.Accordion", {
           this.bind("adjustedScaleFactor", control, "scaleFactor");
 
           // handle clicks on the minimap
-          control.addListener("panelTap", e => {
-            const top = this.getChildControl("scroll").getItemTop(e.getData());
-            this.getChildControl("scroll").scrollToY(top);
-          });
+          control.addListener("panelTap", e => this.scrollTo(e.getData()));
 
           // prevent infinite loop
           let busy = false;
@@ -160,6 +157,11 @@ qx.Class.define("zx.ui.accordion.Accordion", {
       }
 
       return control ?? super._createChildControlImpl(id);
+    },
+
+    scrollTo(widget) {
+      const top = this.getChildControl("scroll").getItemTop(widget);
+      this.getChildControl("scroll").scrollToY(top);
     },
 
     /**
