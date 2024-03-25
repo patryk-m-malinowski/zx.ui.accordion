@@ -15,7 +15,7 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
   extend: qx.ui.core.Widget,
 
   /**
-   * @param {zx.ui.accordion.AccrodionPanelGroup} accordion The accordion to mirror
+   * @param {zx.ui.accordion.AccordionPanelGroup} accordion The accordion to mirror
    */
   construct(accordion) {
     super();

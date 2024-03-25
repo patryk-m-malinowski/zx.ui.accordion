@@ -28,6 +28,17 @@ qx.Theme.define("zx.ui.accordion.theme.MAppearance", {
     "accordion/scroll/pane": "scrollarea/pane",
     "accordion/scroll/scrollbar-x": "scrollbar",
     "accordion/scroll/scrollbar-y": "scrollbar",
+    "accordion/scrollTabs": {
+      include: "scrollarea",
+      style(states, styles) {
+        styles = qx.lang.Object.clone(styles ?? {}, true);
+        styles.margin = [4, 2];
+        return styles;
+      }
+    },
+    "accordion/scrollTabs/pane": "scrollarea/pane",
+    "accordion/scrollTabs/scrollbar-x": "scrollbar",
+    "accordion/scrollTabs/scrollbar-y": "scrollbar",
 
     /**
      * Applied to the {@link zx.ui.accordion.AccordionPanelGroup} used by the
@@ -171,6 +182,16 @@ qx.Theme.define("zx.ui.accordion.theme.MAppearance", {
           margin: [1, 8, 0, 8]
         };
       }
-    }
+    },
+
+    "accordion-tab-button": {
+      include: "button",
+      style(states, styles) {
+        styles = qx.lang.Object.clone(styles ?? {}, true);
+        styles.padding = [4, 8];
+        return styles;
+      }
+    },
+    "accordion-tab-button/label": "button/label"
   }
 });

@@ -14,17 +14,21 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
   /**
    * @param {boolean} minimap Should a minimap be displayed for this accordion.
-   *   When left false, the minimap is never created and will not affect the
-   *   application.
+   * @param {boolean} tabs Should tabs be displayed for this accordion.
    */
-  construct(minimap) {
+  construct(minimap, tabs) {
     super();
 
     this._setLayout(new qx.ui.layout.Canvas());
 
-    this._add(this.getChildControl("scroll"), { top: 0, left: 0, right: 0, bottom: 0 });
+    this._add(this.getChildControl("root"), { top: 0, left: 0, right: 0, bottom: 0 });
 
-    if (minimap) this.setMinimap(minimap);
+    if (minimap) {
+      this.setMinimap(minimap);
+    }
+    if (tabs) {
+      this.setTabs(tabs);
+    }
   },
 
   properties: {
@@ -44,6 +48,15 @@ qx.Class.define("zx.ui.accordion.Accordion", {
       nullable: false,
       event: "changeMinimap",
       apply: "_applyMinimap",
+      themeable: true,
+      init: false
+    },
+
+    tabs: {
+      check: "Boolean",
+      nullable: false,
+      event: "changeTabs",
+      apply: "_applyTabs",
       themeable: true,
       init: false
     },
@@ -88,17 +101,29 @@ qx.Class.define("zx.ui.accordion.Accordion", {
     },
 
     /**
+     * Apply for the tabs property.
+     */
+    _applyTabs(value) {
+      this.getChildControl("scrollTabs").setVisibility(value ? "visible" : "excluded");
+    },
+
+    /**
      * @override
      */
     _createChildControlImpl(id) {
       let control;
       switch (id) {
+        case "root":
+          control = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+          control.add(this.getChildControl("scrollTabs"));
+          control.add(this.getChildControl("scroll"), { flex: 1 });
+          break;
         case "panelgroup":
           control = new zx.ui.accordion.AccordionPanelGroup();
           break;
         case "minimap":
           control = new zx.ui.accordion.minimap.Minicordion(this.getChildControl("panelgroup"));
-          this._add(control, { right: 40, top: 0 });
+          this._add(control, { right: 50, top: 50 });
 
           // bind scale factor
           this.bind("adjustedScaleFactor", control, "scaleFactor");
@@ -148,7 +173,14 @@ qx.Class.define("zx.ui.accordion.Accordion", {
           };
           this.getChildControl("panelgroup").addListener("resize", heightApply);
           control.addListener("panelTap", heightApply);
+          break;
 
+        case "scrollTabs":
+          control = new qx.ui.container.Scroll(this.getChildControl("tabs"));
+          break;
+        case "tabs":
+          control = new zx.ui.accordion.Tabs(this);
+          control.addListener("tabTap", e => this.scrollTo(e.getData().set({ panelOpen: true })));
           break;
 
         case "scroll":

@@ -33,7 +33,7 @@ qx.Class.define("zx.demo.Application", {
       }
 
       // accordion
-      const accordion = new zx.ui.accordion.Accordion();
+      const accordion = new zx.ui.accordion.Accordion(true, true);
 
       const panels = Array.from({ length: 50 }, (_, i) => {
         const panel = new zx.ui.accordion.AccordionPanel(`Panel ${i}`);
@@ -47,8 +47,6 @@ qx.Class.define("zx.demo.Application", {
       });
 
       panels.forEach(panel => accordion.add(panel));
-
-      accordion.setMinimap(true);
 
       const doc = this.getRoot();
       doc.add(accordion, { top: 45, left: 45, right: 45, bottom: 45 });
