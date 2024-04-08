@@ -109,6 +109,9 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
      * @param {boolean} [fraction] Whether the position is a fraction.
      */
     _scrollToPosition(position, fraction = false) {
+      if (!this.getLayoutParent() || !this.getBounds()) {
+        return;
+      }
       const maxTop =
         this.getLayoutParent().getChildControl("content").getBounds().height -
         this.getBounds().height;
