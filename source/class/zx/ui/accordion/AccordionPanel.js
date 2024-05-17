@@ -70,6 +70,16 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
   },
 
   members: {
+    /**
+     * The last recorded height by {@link #renderLayout}, if any.
+     *
+     * @type {number | null}
+     */
+    __lastKnownHeight: null,
+
+    /**
+     * @Override
+     */
     _forwardStates: {
       open: true
     },
@@ -121,13 +131,6 @@ qx.Class.define("zx.ui.accordion.AccordionPanel", {
       }
       return control ?? super._createChildControlImpl(id);
     },
-
-    /**
-     * The last recorded height by {@link #renderLayout}, if any.
-     *
-     * @type {number | null}
-     */
-    __lastKnownHeight: null,
 
     /**
      * @override

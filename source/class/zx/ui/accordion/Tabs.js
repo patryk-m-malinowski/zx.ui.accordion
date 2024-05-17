@@ -23,6 +23,8 @@ qx.Class.define("zx.ui.accordion.Tabs", {
     this.__panels = new Map();
     this.__listeners = new Map();
 
+    this.add(this.getQxObject("btnExpandAllNone"));
+
     const panelGroup = accordion.getChildControl("panelgroup");
     panelGroup.addListener("panelAdd", this._onPanelAdd, this);
     panelGroup.addListener("panelRemove", this._onPanelRemove, this);
@@ -33,7 +35,31 @@ qx.Class.define("zx.ui.accordion.Tabs", {
     /**
      * Fired when a tab is tapped.
      */
-    tabTap: "qx.event.type.Data"
+    tabTap: "qx.event.type.Data",
+
+    /** Fired when expand all/none is fired */
+    expandAllNone: "qx.event.type.Event"
+  },
+
+  properties: {
+    /** Whether to include an expand all/none link after the tabs */
+    showExpandAllNone: {
+      init: true,
+      check: "Boolean",
+      nullable: false,
+      event: "changeShowExpandAllNone",
+      apply: "_applyShowExpandAllNone"
+    }
+  },
+
+  objects: {
+    btnExpandAllNone() {
+      let btn = new qx.ui.form.Button(this.tr("Expand All/None")).set({
+        appearance: "accordion-tab-button"
+      });
+      btn.addListener("tap", () => this.fireEvent("expandAllNone"));
+      return btn;
+    }
   },
 
   members: {
@@ -41,6 +67,7 @@ qx.Class.define("zx.ui.accordion.Tabs", {
      * @type {Map<string, zx.ui.accordion.minimap.MinicordionPanel>}
      */
     __panels: null,
+
     /**
      * @type {Map<string, unknown>}
      */
@@ -61,6 +88,13 @@ qx.Class.define("zx.ui.accordion.Tabs", {
     },
 
     /**
+     * Apply for the `showExpandAllNone` property.
+     */
+    _applyShowExpandAllNone(value, oldValue) {
+      this.getQxObject("btnExpandAllNone").setVisibility(value ? "visible" : "excluded");
+    },
+
+    /**
      * Adds a panel to the minimap.
      *
      * @param {zx.ui.accordion.AccordionPanel} panel The panel to add
@@ -70,10 +104,10 @@ qx.Class.define("zx.ui.accordion.Tabs", {
       if (this.__panels.has(panelHash)) {
         this._removePanel(this.__panels.get(panelHash));
       }
-      const tab = new qx.ui.form.Button();
+      let tab = new qx.ui.form.Button();
       panel.bind("label", tab, "label");
       tab.setAppearance("accordion-tab-button");
-      this.add(tab);
+      this.addAt(tab, this.getChildren().length - 1);
       this.__listeners.set(
         panelHash,
         tab.addListener("tap", () => this.fireDataEvent("tabTap", panel))

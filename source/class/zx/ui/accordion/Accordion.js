@@ -181,6 +181,11 @@ qx.Class.define("zx.ui.accordion.Accordion", {
         case "tabs":
           control = new zx.ui.accordion.Tabs(this);
           control.addListener("tabTap", e => this.scrollTo(e.getData().set({ panelOpen: true })));
+          control.addListener("expandAllNone", e => {
+            let panes = this.getChildren();
+            let allOpen = panes.every(pane => pane.getPanelOpen());
+            panes.forEach(pane => pane.setPanelOpen(!allOpen));
+          });
           break;
 
         case "scroll":
