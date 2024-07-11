@@ -22,6 +22,7 @@ qx.Class.define("zx.ui.accordion.Tabs", {
 
     this.__panels = new Map();
     this.__listeners = new Map();
+    this.__accordion = accordion;
 
     this.add(this.getQxObject("btnExpandAllNone"));
 
@@ -49,6 +50,13 @@ qx.Class.define("zx.ui.accordion.Tabs", {
       nullable: false,
       event: "changeShowExpandAllNone",
       apply: "_applyShowExpandAllNone"
+    },
+
+    activeTab: {
+      check: "zx.ui.accordion.AccordionPanel",
+      apply: "_applyActiveTab",
+      nullable: true,
+      init: null
     }
   },
 
@@ -63,15 +71,27 @@ qx.Class.define("zx.ui.accordion.Tabs", {
   },
 
   members: {
-    /**
-     * @type {Map<string, zx.ui.accordion.minimap.MinicordionPanel>}
-     */
+    /**@type {Map<string, zx.ui.accordion.minimap.MinicordionPanel>}*/
     __panels: null,
 
-    /**
-     * @type {Map<string, unknown>}
-     */
+    /**@type {Map<string, unknown>}*/
     __listeners: null,
+
+    /**@type {zx.ui.accordion.Accordion}*/
+    __accordion: null,
+
+    _applyActiveTab(value, oldValue) {
+      if (oldValue) {
+        let oldActiveTab = this.__panels.get(oldValue.toHashCode());
+        oldActiveTab?.removeState("active");
+        oldActiveTab.getChildControl("label").removeState("active");
+      }
+      if (value) {
+        let newActiveTab = this.__panels.get(value.toHashCode());
+        newActiveTab?.addState("active");
+        newActiveTab.getChildControl("label").addState("active");
+      }
+    },
 
     /**
      * Adds a panel to the minimap when it is added to the accordion.

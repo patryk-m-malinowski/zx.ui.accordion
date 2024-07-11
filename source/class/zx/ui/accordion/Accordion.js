@@ -62,6 +62,25 @@ qx.Class.define("zx.ui.accordion.Accordion", {
     },
 
     /**
+     * Whether to highlight the name of the currently active tab in the tabs list.
+     *
+     * Only effective when the `tabs` property is set to `true`.
+     *
+     * The tab which are highlighted are any tabs which match the following criteria:
+     * - The tab is opened
+     * - The tab's content is visible on screen
+     * - The tab is the first tab from the top of the accordion which meets the above criteria
+     */
+    highlightActiveTab: {
+      check: "Boolean",
+      nullable: false,
+      event: "changeHighlightActiveTab",
+      apply: "_applyHighlightActiveTab",
+      themeable: true,
+      init: false
+    },
+
+    /**
      * The percentage by which to scale the height of the minimap.
      *
      * Interpreted as `1` = 100%, `0.5` = 50%, &c.
@@ -105,6 +124,50 @@ qx.Class.define("zx.ui.accordion.Accordion", {
      */
     _applyTabs(value) {
       this.getChildControl("scrollTabs").setVisibility(value ? "visible" : "excluded");
+      this.__updateActiveTabListener();
+    },
+
+    __highlightActiveTabListener: null,
+    _applyHighlightActiveTab() {
+      this.__updateActiveTabListener();
+    },
+
+    __updateActiveTabListener() {
+      let doHighlight = this.getHighlightActiveTab();
+      let doShowTabs = this.getTabs();
+      let scrollbar = this.getChildControl("scroll").getChildControl("scrollbar-y");
+      let tabs = this.getChildControl("tabs");
+
+      if (this.__highlightActiveTabListener) {
+        scrollbar.removeListenerById(this.__highlightActiveTabListener);
+        tabs.setActiveTab(null);
+      }
+
+      if (!doShowTabs || !doHighlight) {
+        return;
+      }
+
+      this.__highlightActiveTabListener = scrollbar.addListener(
+        "scroll",
+        this.__updateActiveTab,
+        this
+      );
+      this.__updateActiveTab();
+    },
+
+    __updateActiveTab() {
+      let tabs = this.getChildControl("tabs");
+      for (let panel of this.getChildren()) {
+        if (
+          panel.getPanelOpen() &&
+          this.getContentLocation()?.bottom > panel.getContentLocation()?.top &&
+          this.getContentLocation()?.top < panel.getContentLocation()?.bottom
+        ) {
+          tabs.setActiveTab(panel);
+          return;
+        }
+      }
+      tabs.setActiveTab(null);
     },
 
     /**

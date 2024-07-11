@@ -189,9 +189,21 @@ qx.Theme.define("zx.ui.accordion.theme.MAppearance", {
       style(states, styles) {
         styles = qx.lang.Object.clone(styles ?? {}, true);
         styles.padding = [4, 8];
+        if (states.active) {
+          styles.backgroundColor = "accordion-minimap-floatybit-background";
+        }
         return styles;
       }
     },
-    "accordion-tab-button/label": "button/label"
+    "accordion-tab-button/label": {
+      include: "button/label",
+
+      style(states, styles) {
+        if (states.active) {
+          styles.textColor = "white";
+        }
+        return styles;
+      }
+    }
   }
 });
