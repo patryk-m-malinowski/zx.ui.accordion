@@ -18,7 +18,7 @@ qx.Class.define("zx.ui.accordion.minimap.FloatyBit", {
     super();
 
     qx.core.Init.getApplication().getRoot().addListener("pointerdown", this._onPointerDown, this);
-    qx.core.Init.getApplication().getRoot().addListener("pointerup", this._onPointerUp, this);
+    window.addEventListener("pointerup", () => this._onPointerUp());
     qx.core.Init.getApplication().getRoot().addListener("pointermove", this._onPointerMove, this);
   },
 
