@@ -23,8 +23,8 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
     this.getChildControl("content");
     this.getChildControl("floatybit");
 
-    this.__panels = new Map();
-    this.__listeners = new Map();
+    this.__mincordionPanels = new Map();
+    this.__tapListeners = new Map();
 
     accordion.addListener("panelAdd", this._onPanelAdd, this);
     accordion.addListener("panelRemove", this._onPanelRemove, this);
@@ -60,17 +60,17 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
     /**
      * @type {Map<string, zx.ui.accordion.minimap.MinicordionPanel>}
      */
-    __panels: null,
+    __mincordionPanels: null,
     /**
      * @type {Map<string, unknown>}
      */
-    __listeners: null,
+    __tapListeners: null,
 
     /**
      * Apply for the scaleFactor property.
      */
     _applyScaleFactor(value) {
-      if (value) this.__panels.forEach(panel => panel.setScaleFactor(value));
+      if (value) this.__mincordionPanels.forEach(panel => panel.setScaleFactor(value));
     },
 
     /**
@@ -93,16 +93,18 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
      * @param {zx.ui.accordion.AccordionPanel} panel The panel to add
      */
     _addPanel(panel) {
-      const panelHash = panel.toHashCode();
-      if (this.__panels.has(panelHash)) this._removePanel(this.__panels.get(panelHash));
-      const minicordionPanel = new zx.ui.accordion.minimap.MinicordionPanel(panel);
+      let panelHash = panel.toHashCode();
+      if (this.__mincordionPanels.has(panelHash)) {
+        this._removePanel(this.__mincordionPanels.get(panelHash));
+      }
+      let minicordionPanel = new zx.ui.accordion.minimap.MinicordionPanel(panel);
       minicordionPanel.setScaleFactor(this.getScaleFactor());
       this.getChildControl("content")._add(minicordionPanel);
-      this.__listeners.set(
+      this.__tapListeners.set(
         panelHash,
         minicordionPanel.addListener("tap", () => this.fireDataEvent("panelTap", panel))
       );
-      this.__panels.set(panelHash, minicordionPanel);
+      this.__mincordionPanels.set(panelHash, minicordionPanel);
     },
 
     /**
@@ -112,12 +114,15 @@ qx.Class.define("zx.ui.accordion.minimap.Minicordion", {
      */
     _removePanel(panel) {
       const panelHash = panel.toHashCode();
-      if (this.__panels.has(panelHash)) {
-        this.getChildControl("content")._remove(this.__panels.get(panelHash));
-        this.__panels.get(panelHash).removeListener(this.__listeners.get(panelHash));
-        this.__panels.get(panelHash).dispose();
-        this.__panels.delete(panelHash);
-        this.__listeners.delete(panelHash);
+      if (this.__mincordionPanels.has(panelHash)) {
+        let minicordionPanel = this.__mincordionPanels.get(panelHash);
+        this.__mincordionPanels.delete(panelHash);
+
+        this.getChildControl("content")._remove(minicordionPanel);
+        minicordionPanel.removeListenerById(this.__tapListeners.get(panelHash));
+
+        this.__tapListeners.delete(panelHash);
+        minicordionPanel.dispose();
       }
     },
 

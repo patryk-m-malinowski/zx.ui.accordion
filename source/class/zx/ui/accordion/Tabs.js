@@ -20,8 +20,8 @@ qx.Class.define("zx.ui.accordion.Tabs", {
   construct(accordion) {
     super(new qx.ui.layout.HBox());
 
-    this.__panels = new Map();
-    this.__listeners = new Map();
+    this.__panelTabs = new Map();
+    this.__tabListeners = new Map();
     this.__accordion = accordion;
 
     this.add(this.getQxObject("btnExpandAllNone"));
@@ -72,22 +72,24 @@ qx.Class.define("zx.ui.accordion.Tabs", {
 
   members: {
     /**@type {Map<string, zx.ui.accordion.minimap.MinicordionPanel>}*/
-    __panels: null,
+    __panelTabs: null,
 
     /**@type {Map<string, unknown>}*/
-    __listeners: null,
+    __tabListeners: null,
 
     /**@type {zx.ui.accordion.Accordion}*/
     __accordion: null,
 
     _applyActiveTab(value, oldValue) {
       if (oldValue) {
-        let oldActiveTab = this.__panels.get(oldValue.toHashCode());
-        oldActiveTab?.removeState("active");
-        oldActiveTab.getChildControl("label").removeState("active");
+        let oldActiveTab = this.__panelTabs.get(oldValue.toHashCode());
+        if (oldActiveTab) {
+          oldActiveTab?.removeState("active");
+          oldActiveTab.getChildControl("label").removeState("active");
+        }
       }
       if (value) {
-        let newActiveTab = this.__panels.get(value.toHashCode());
+        let newActiveTab = this.__panelTabs.get(value.toHashCode());
         newActiveTab?.addState("active");
         newActiveTab.getChildControl("label").addState("active");
       }
@@ -104,7 +106,7 @@ qx.Class.define("zx.ui.accordion.Tabs", {
      * Removes a panel from the minimap when it is removed from the accordion.
      */
     _onPanelRemove(e) {
-      this._removePanel(e.getData());
+      this._removeTab(e.getData());
     },
 
     /**
@@ -120,19 +122,19 @@ qx.Class.define("zx.ui.accordion.Tabs", {
      * @param {zx.ui.accordion.AccordionPanel} panel The panel to add
      */
     _addTab(panel) {
-      const panelHash = panel.toHashCode();
-      if (this.__panels.has(panelHash)) {
-        this._removePanel(this.__panels.get(panelHash));
+      let panelHash = panel.toHashCode();
+      if (this.__panelTabs.has(panelHash)) {
+        this._removeTab(this.__panelTabs.get(panelHash));
       }
       let tab = new qx.ui.form.Button();
       panel.bind("label", tab, "label");
       tab.setAppearance("accordion-tab-button");
       this.addAt(tab, this.getChildren().length - 1);
-      this.__listeners.set(
+      this.__tabListeners.set(
         panelHash,
         tab.addListener("tap", () => this.fireDataEvent("tabTap", panel))
       );
-      this.__panels.set(panelHash, tab);
+      this.__panelTabs.set(panelHash, tab);
     },
 
     /**
@@ -140,14 +142,15 @@ qx.Class.define("zx.ui.accordion.Tabs", {
      *
      * @param {zx.ui.accordion.AccordionPanel} panel The panel to remove
      */
-    _removePanel(panel) {
-      const panelHash = panel.toHashCode();
-      if (this.__panels.has(panelHash)) {
-        this.remove(this.__panels.get(panelHash));
-        this.__panels.get(panelHash).removeListener(this.__listeners.get(panelHash));
-        this.__panels.get(panelHash).dispose();
-        this.__panels.delete(panelHash);
-        this.__listeners.delete(panelHash);
+    _removeTab(panel) {
+      let panelHash = panel.toHashCode();
+      if (this.__panelTabs.has(panelHash)) {
+        let tab = this.__panelTabs.get(panelHash);
+        this.__panelTabs.delete(panelHash);
+        this.remove(tab);
+        tab.removeListenerById(this.__tabListeners.get(panelHash));
+        this.__tabListeners.delete(panelHash);
+        tab.dispose();
       }
     }
   }
