@@ -140,7 +140,7 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
       if (this.__highlightActiveTabListener) {
         scrollbar.removeListenerById(this.__highlightActiveTabListener);
-        tabs.setActiveTab(null);
+        tabs.setActivePanel(null);
       }
 
       if (!doShowTabs || !doHighlight) {
@@ -157,17 +157,29 @@ qx.Class.define("zx.ui.accordion.Accordion", {
 
     __updateActiveTab() {
       let tabs = this.getChildControl("tabs");
+      let tabsLoc = tabs.getContentLocation();
+      if (!tabsLoc) {
+        return;
+      }
+      let tabsHeight = tabsLoc.bottom - tabsLoc.top;
+      let thisLoc = this.getContentLocation();
+      const pad = value => {
+        let str = "      " + value.toString();
+        return str.substring(str.length - 6);
+      };
+      let scrollY = this.getChildControl("scroll").getScrollY();
+      // prettier-ignore
+      console.log(`tabsHeight=${tabsHeight}, thisLoc.top=${thisLoc.top}, scrollY=${scrollY}, panels=${this.getChildren()
+          .map(c => pad(c.getBounds().top))
+          .join("")}`
+      );
       for (let panel of this.getChildren()) {
-        if (
-          panel.getPanelOpen() &&
-          this.getContentLocation()?.bottom > panel.getContentLocation()?.top &&
-          this.getContentLocation()?.top < panel.getContentLocation()?.bottom
-        ) {
-          tabs.setActiveTab(panel);
-          return;
+        let top = panel.getBounds().top;
+        if (top + tabsHeight >= scrollY) {
+          tabs.setActivePanel(panel);
+          break;
         }
       }
-      tabs.setActiveTab(null);
     },
 
     /**
@@ -241,9 +253,16 @@ qx.Class.define("zx.ui.accordion.Accordion", {
         case "scrollTabs":
           control = new qx.ui.container.Scroll(this.getChildControl("tabs"));
           break;
+
         case "tabs":
           control = new zx.ui.accordion.Tabs(this);
-          control.addListener("tabTap", e => this.scrollTo(e.getData().set({ panelOpen: true })));
+          control.addListener("changeActivePanel", e => {
+            let panel = e.getData();
+            if (panel) {
+              panel.set({ panelOpen: true });
+              this.scrollTo(panel);
+            }
+          });
           control.addListener("expandAllNone", e => {
             let panes = this.getChildren();
             let allOpen = panes.every(pane => pane.getPanelOpen());

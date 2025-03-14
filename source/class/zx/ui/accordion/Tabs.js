@@ -33,11 +33,6 @@ qx.Class.define("zx.ui.accordion.Tabs", {
   },
 
   events: {
-    /**
-     * Fired when a tab is tapped.
-     */
-    tabTap: "qx.event.type.Data",
-
     /** Fired when expand all/none is fired */
     expandAllNone: "qx.event.type.Event"
   },
@@ -46,17 +41,18 @@ qx.Class.define("zx.ui.accordion.Tabs", {
     /** Whether to include an expand all/none link after the tabs */
     showExpandAllNone: {
       init: true,
-      check: "Boolean",
       nullable: false,
+      check: "Boolean",
       event: "changeShowExpandAllNone",
       apply: "_applyShowExpandAllNone"
     },
 
-    activeTab: {
-      check: "zx.ui.accordion.AccordionPanel",
-      apply: "_applyActiveTab",
+    activePanel: {
       nullable: true,
-      init: null
+      init: null,
+      check: "zx.ui.accordion.AccordionPanel",
+      event: "changeActivePanel",
+      apply: "_applyActivePanel"
     }
   },
 
@@ -80,7 +76,7 @@ qx.Class.define("zx.ui.accordion.Tabs", {
     /**@type {zx.ui.accordion.Accordion}*/
     __accordion: null,
 
-    _applyActiveTab(value, oldValue) {
+    _applyActivePanel(value, oldValue) {
       if (oldValue) {
         let oldActiveTab = this.__panelTabs.get(oldValue.toHashCode());
         if (oldActiveTab) {
@@ -132,7 +128,7 @@ qx.Class.define("zx.ui.accordion.Tabs", {
       this.addAt(tab, this.getChildren().length - 1);
       this.__tabListeners.set(
         panelHash,
-        tab.addListener("tap", () => this.fireDataEvent("tabTap", panel))
+        tab.addListener("tap", () => this.setActivePanel(panel))
       );
       this.__panelTabs.set(panelHash, tab);
     },
