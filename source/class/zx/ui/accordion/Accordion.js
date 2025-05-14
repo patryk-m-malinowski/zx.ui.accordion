@@ -161,15 +161,10 @@ qx.Class.define("zx.ui.accordion.Accordion", {
       if (!tabsLoc) {
         return;
       }
-      let tabsHeight = tabsLoc.bottom - tabsLoc.top;
-      let thisLoc = this.getContentLocation();
-      const pad = value => {
-        let str = "         " + value.toString();
-        return str.substring(str.length - 10);
-      };
+
       let scrollY = this.getChildControl("scroll").getScrollY();
       let panel = tabs.getActivePanel();
-      if (panel) {
+      if (panel && panel.getBounds()) {
         // If the scrollY is within the top 50% of the active panel, then just leave the active panel as it is;
         //  this is to cope with situations where minor scrolling causes the active panel to change
         let top = panel.getBounds().top;
@@ -179,6 +174,7 @@ qx.Class.define("zx.ui.accordion.Accordion", {
         }
       }
       for (let panel of this.getChildren()) {
+        if (!panel.getBounds()) continue;
         let top = panel.getBounds().top;
         if (top >= scrollY) {
           tabs.setActivePanel(panel);
