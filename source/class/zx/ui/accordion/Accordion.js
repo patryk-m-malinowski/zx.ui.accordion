@@ -156,30 +156,30 @@ qx.Class.define("zx.ui.accordion.Accordion", {
     },
 
     __updateActiveTab() {
-      let tabs = this.getChildControl("tabs");
-      let tabsLoc = tabs.getContentLocation();
-      if (!tabsLoc) {
-        return;
-      }
-
-      let scrollY = this.getChildControl("scroll").getScrollY();
-      let panel = tabs.getActivePanel();
-      if (panel && panel.getBounds()) {
-        // If the scrollY is within the top 50% of the active panel, then just leave the active panel as it is;
-        //  this is to cope with situations where minor scrolling causes the active panel to change
-        let top = panel.getBounds().top;
-        let maxHeight = Math.round(panel.getBounds().height * 0.5);
-        if (scrollY >= top && scrollY <= top + maxHeight) {
+      const doit = () => {
+        let tabs = this.getChildControl("tabs");
+        let tabsLoc = tabs.getContentLocation();
+        if (!tabsLoc) {
           return;
         }
-      }
-      for (let panel of this.getChildren()) {
-        if (!panel.getBounds()) continue;
-        let top = panel.getBounds().top;
-        if (top >= scrollY) {
-          tabs.setActivePanel(panel);
-          break;
+
+        let scrollY = this.getChildControl("scroll").getScrollY();
+        for (let panel of this.getChildren()) {
+          if (!panel.getBounds()) continue;
+          let top = panel.getBounds().top;
+          let bottom = top + panel.getBounds().height;
+          if (scrollY >= top && scrollY < bottom) {
+            tabs.setActivePanel(panel);
+            break;
+          }
         }
+      };
+
+      try {
+        this.__inUpdateActiveTab = true;
+        doit();
+      } finally {
+        this.__inUpdateActiveTab = false;
       }
     },
 
@@ -260,8 +260,10 @@ qx.Class.define("zx.ui.accordion.Accordion", {
           control.addListener("changeActivePanel", e => {
             let panel = e.getData();
             if (panel) {
-              panel.set({ panelOpen: true });
-              this.scrollTo(panel);
+              if (!this.__inUpdateActiveTab) {
+                panel.set({ panelOpen: true });
+                this.scrollTo(panel);
+              }
             }
           });
           control.addListener("expandAllNone", e => {
